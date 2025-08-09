@@ -69,6 +69,21 @@ function handleFileSelect(file) {
     }
 
     selectedFile = file;
+    console.log('文件已选择:', file.name, file.size, 'bytes');
+
+    // 关键修复：将拖拽的文件同步到 file input 元素
+    // 这样可以解决拖拽文件时浏览器认为 required 字段未填写的问题
+    try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        console.log('✅ 文件已同步到 input 元素，files.length:', fileInput.files.length);
+    } catch (error) {
+        console.log('⚠️ 无法同步文件到 input 元素（可能是浏览器兼容性问题）:', error);
+        // 如果 DataTransfer 不支持，建议移除 HTML 中的 required 属性
+        console.log('建议在 HTML 中移除 file input 的 required 属性');
+    }
+
     displayFilePreview(file);
 
     // 尝试自动识别身份证信息
@@ -96,18 +111,18 @@ function showManualInputForm() {
                 <h4>请输入身份证信息：</h4>
                 <div style="margin-bottom: 10px;">
                     <label>姓名：</label>
-                    <input type="text" id="inputName" style="width: 200px; padding: 5px;" required>
+                    <input type="text" id="inputName" name="inputName" style="width: 200px; padding: 5px;" required>
                 </div>
                 <div style="margin-bottom: 10px;">
                     <label>性别：</label>
-                    <select id="inputGender" style="width: 100px; padding: 5px;">
+                    <select id="inputGender" name="inputGender" style="width: 100px; padding: 5px;">
                         <option value="男">男</option>
                         <option value="女">女</option>
                     </select>
                 </div>
                 <div style="margin-bottom: 10px;">
                     <label>身份证号：</label>
-                    <input type="text" id="inputIdNumber" style="width: 250px; padding: 5px;" maxlength="18" required>
+                    <input type="text" id="inputIdNumber" name="inputIdNumber" style="width: 250px; padding: 5px;" maxlength="18" required>
                 </div>
                 <button type="button" onclick="confirmUserInfo()" style="padding: 8px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">确认信息</button>
             </div>
@@ -142,7 +157,7 @@ async function startOCRRecognition(file) {
             // 识别成功，自动填充信息
             extractedUserInfo = {
                 name: data.data.name || '',
-                gender: data.data.gender || '',
+                gender: data.data.sex || data.data.gender || '',
                 idNumber: data.data.idNumber || '',
                 // 新增字段
                 birth: data.data.birth || '',
@@ -150,6 +165,7 @@ async function startOCRRecognition(file) {
                 nation: data.data.nation || ''
             };
 
+            console.log('OCR识别成功:', extractedUserInfo);
             displayUserInfo(extractedUserInfo);
             uploadArea.querySelector('.upload-text').textContent = '✅ 身份证信息识别成功';
 
@@ -189,27 +205,31 @@ window.confirmUserInfo = function() {
     const name = document.getElementById('inputName').value.trim();
     const gender = document.getElementById('inputGender').value;
     const idNumber = document.getElementById('inputIdNumber').value.trim();
-    
+
     if (!name || !idNumber) {
         showError('请填写完整的身份信息');
         return;
     }
-    
+
     if (!validateIdNumber(idNumber)) {
         showError('身份证号码格式不正确');
         return;
     }
-    
+
     extractedUserInfo = {
         name: name,
         gender: gender,
         idNumber: idNumber
     };
-    
+
+    console.log('手动输入信息确认:', extractedUserInfo);
     displayUserInfo(extractedUserInfo);
-    
+
     // 隐藏输入表单
     document.getElementById('manualInputForm').style.display = 'none';
+
+    // 显示用户信息区域
+    document.getElementById('userInfo').style.display = 'block';
 }
 
 // 显示用户信息
@@ -228,6 +248,9 @@ function displayUserInfo(userInfo) {
         document.getElementById('previewFileName').textContent =
             `${userInfo.name}-[企业名称].${selectedFile.name.split('.').pop()}`;
     }
+
+    // 显示用户信息区域
+    document.getElementById('userInfo').style.display = 'block';
 }
 
 // 监听企业名称输入，实时更新文件名预览
@@ -253,7 +276,7 @@ function removeFile() {
     uploadArea.style.border = '2px dashed #667eea';
     uploadArea.querySelector('.upload-text').textContent = '点击上传或拖拽文件到此处';
     fileInput.value = '';
-    
+
     // 重置输入表单
     const inputForm = document.getElementById('manualInputForm');
     if (inputForm) {
@@ -261,6 +284,8 @@ function removeFile() {
         document.getElementById('inputIdNumber').value = '';
         inputForm.style.display = 'block';
     }
+
+    console.log('文件已移除，重置所有状态');
 }
 
 function formatFileSize(bytes) {
@@ -293,13 +318,13 @@ async function saveFileToServer(file, userName, enterpriseName, idNumber) {
             method: 'POST',
             body: formData
         });
-        
+
         const data = await response.json();
-        
+
         if (!data.success) {
             throw new Error(data.message || '上传失败');
         }
-        
+
         return {
             success: true,
             fileName: data.data.fileName,
@@ -351,23 +376,50 @@ document.getElementById('verificationForm').addEventListener('submit', async (e)
     const loading = document.getElementById('loading');
     const btnText = document.querySelector('.btn-text');
 
+    console.log('=== 表单提交开始 ===');
+    console.log('企业名称:', enterpriseName);
+    console.log('selectedFile:', selectedFile);
+    console.log('extractedUserInfo:', extractedUserInfo);
+    console.log('fileInput.files.length:', fileInput.files.length);
+    console.log('fileInput.value:', fileInput.value);
+
     // 清除之前的错误样式
     document.getElementById('enterpriseName').classList.remove('error-input');
 
     if (!enterpriseName) {
+        console.log('❌ 企业名称为空');
         showError('请输入企业名称', 'enterpriseName');
         return;
     }
 
+    // 更详细的文件检查
     if (!selectedFile) {
+        console.log('❌ selectedFile 为空');
+        console.log('fileInput.files:', fileInput.files);
         showError('请上传身份证件照');
         return;
     }
 
+    // 检查文件是否有效
+    if (!selectedFile.name || selectedFile.size === 0) {
+        console.log('❌ 文件无效:', selectedFile);
+        showError('选择的文件无效，请重新选择');
+        return;
+    }
+
     if (!extractedUserInfo) {
+        console.log('❌ extractedUserInfo 为空');
         showError('请输入身份证件信息');
         return;
     }
+
+    if (!extractedUserInfo.name || !extractedUserInfo.idNumber) {
+        console.log('❌ 用户信息不完整:', extractedUserInfo);
+        showError('身份证信息不完整，请重新输入');
+        return;
+    }
+
+    console.log('✅ 所有验证通过，开始提交...');
 
     // 显示加载状态
     submitBtn.disabled = true;
@@ -376,16 +428,25 @@ document.getElementById('verificationForm').addEventListener('submit', async (e)
 
     try {
         // 验证企业名称
+        console.log('正在验证企业名称...');
         const enterpriseExists = await checkEnterpriseExists(enterpriseName);
+        console.log('企业验证结果:', enterpriseExists);
+
         if (!enterpriseExists) {
             throw new Error('企业名称未在系统中找到，请检查企业名称是否正确');
         }
 
         // 保存文件到服务器
         console.log('开始保存证件照文件...');
+        console.log('文件信息:', {
+            name: selectedFile.name,
+            size: selectedFile.size,
+            type: selectedFile.type
+        });
+
         const serverSaveResult = await saveFileToServer(
-            selectedFile, 
-            extractedUserInfo.name, 
+            selectedFile,
+            extractedUserInfo.name,
             enterpriseName,
             extractedUserInfo.idNumber
         );
@@ -402,6 +463,7 @@ document.getElementById('verificationForm').addEventListener('submit', async (e)
 
         // 存储到sessionStorage传递给下一页
         sessionStorage.setItem('verificationData', JSON.stringify(verificationData));
+        console.log('验证数据已保存到sessionStorage');
 
         // 显示成功提示
         showSuccess(
@@ -419,6 +481,7 @@ document.getElementById('verificationForm').addEventListener('submit', async (e)
         );
 
     } catch (error) {
+        console.error('❌ 提交表单时出错:', error);
         let errorField = null;
         if (error.message.includes('企业名称')) {
             errorField = 'enterpriseName';
@@ -431,10 +494,12 @@ document.getElementById('verificationForm').addEventListener('submit', async (e)
         submitBtn.disabled = false;
         btnText.style.display = 'inline';
         loading.style.display = 'none';
+        console.log('=== 表单提交结束 ===');
     }
 });
 
 function showError(message, fieldId = null) {
+    console.log('显示错误信息:', message);
     document.getElementById('modalIcon').textContent = '⚠️';
     document.getElementById('modalIcon').className = 'error-icon';
     document.getElementById('modalTitle').textContent = '验证失败';
@@ -445,7 +510,7 @@ function showError(message, fieldId = null) {
     if (fieldId) {
         const field = document.getElementById(fieldId);
         field.classList.add('error-input');
-        
+
         // 3秒后移除错误样式
         setTimeout(() => {
             field.classList.remove('error-input');
@@ -454,6 +519,7 @@ function showError(message, fieldId = null) {
 }
 
 function showSuccess(message, callback = null) {
+    console.log('显示成功信息:', message);
     document.getElementById('modalIcon').textContent = '✅';
     document.getElementById('modalIcon').className = 'success-icon';
     document.getElementById('modalTitle').textContent = '验证成功';

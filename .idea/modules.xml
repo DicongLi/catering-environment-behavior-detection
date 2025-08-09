@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/Constructing.iml" filepath="$PROJECT_DIR$/.idea/Constructing.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/catering-environment-behavior-detection.iml" filepath="$PROJECT_DIR$/.idea/catering-environment-behavior-detection.iml" />
->>>>>>> 3c838a39b66d0a38f29b6b821d38e7a39e7936df
     </modules>
   </component>
 </project>

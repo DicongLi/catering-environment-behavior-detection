@@ -1,6 +1,1 @@
-1.找到Redis 文件夹
-2.找到 redis-server.exe 文件
-3.双击运行它
-4.会弹出一个黑色的命令行窗口，显示 Redis 正在运行保持这个窗口开着（不要关闭，否则 Redis 会停止）
-5.mvn clean package
-6.java -jar target/ocr-application-1.0.0.jar
+在终端输入node server.js

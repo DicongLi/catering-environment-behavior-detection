@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)  # 允许跨域请求
 
 # 配置
-FACE_DATABASE_PATH = 'ImagesAttendance'
+FACE_DATABASE_PATH = 'Registration_Images'
 MODEL_PATH = 'models/l_version_1_300.pt'
 CONFIDENCE_THRESHOLD = 0.8
 
@@ -245,4 +245,4 @@ if __name__ == '__main__':
     print("启动人脸识别服务器...")
     print(f"人脸数据库路径: {FACE_DATABASE_PATH}")
     print(f"YOLO模型路径: {MODEL_PATH}")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000, use_reloader=False)
