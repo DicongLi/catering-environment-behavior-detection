@@ -1,0 +1,213 @@
+/* 优化后的管理员登录样式 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 返回按钮样式 */
+.return-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.return-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 登录表单容器 */
+.container {
+    background-color: #ffffff;
+    padding: 48px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 90%;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 12px;
+    text-align: center;
+    color: #1f2937;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.greeting {
+    margin-bottom: 32px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* 输入框样式 */
+input[type="text"], 
+input[type="password"] {
+    width: 100%;
+    padding: 16px;
+    margin: 12px 0;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 16px;
+    background-color: #f9fafb;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, 
+input[type="password"]:focus {
+    outline: none;
+    border-color: #7c3aed;
+    background-color: #ffffff;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: #9ca3af;
+}
+
+/* 按钮样式 */
+button {
+    padding: 16px;
+    width: 100%;
+    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* 忘记密码链接 */
+.admin-forgot-password {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.admin-forgot-password a {
+    color: #7c3aed;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.admin-forgot-password a:hover {
+    color: #6d28d9;
+    text-decoration: underline;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 32px;
+    border-radius: 16px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6b7280;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+/* 错误状态样式 */
+.login-input.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+/* 抖动动画 */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+    100% { transform: translateX(0); }
+}
+
+.login-input.error.shake {
+    animation: shake 0.4s ease;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .container {
+        padding: 32px 24px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    input[type="text"], 
+    input[type="password"],
+    button {
+        font-size: 14px;
+        padding: 14px;
+    }
+}

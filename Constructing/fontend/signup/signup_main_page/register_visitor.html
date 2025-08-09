@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访客注册 - 餐饮环境监测系统</title>
+    <link rel="stylesheet" href="static/css/register_visitor_style.css">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="header">
+            <h1>访客注册</h1>
+            <p>加入餐饮环境监测系统</p>
+        </div>
+
+        <div class="registration-form">
+            <!-- 进度条 -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- 步骤指示器 -->
+            <div class="step-indicator">
+                <div class="step-dot active" id="dot1"></div>
+                <div class="step-dot" id="dot2"></div>
+                <div class="step-dot" id="dot3"></div>
+            </div>
+
+            <!-- 第一步：用户名输入 -->
+            <div class="step active" id="step1">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" placeholder="请输入用户名（3-20个字符）" autocomplete="username">
+                    <div class="error-message" id="usernameError"></div>
+                    <div class="success-message" id="usernameSuccess"></div>
+                </div>
+                <button type="button" class="btn" onclick="nextStep(1)">下一步</button>
+            </div>
+
+            <!-- 第二步：邮箱验证 -->
+            <div class="step" id="step2">
+                <div class="form-group">
+                    <label for="email">邮箱地址</label>
+                    <div class="verification-group">
+                        <input type="email" id="email" name="email" placeholder="请输入邮箱地址" autocomplete="email">
+                        <button type="button" id="sendCodeBtn" onclick="sendVerificationCode()">发送验证码</button>
+                    </div>
+                    <div class="error-message" id="emailError"></div>
+                    <div class="success-message" id="emailSuccess"></div>
+                    <div class="countdown" id="countdown"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="emailCode">验证码</label>
+                    <input type="text" id="emailCode" name="emailCode" placeholder="请输入邮箱验证码" autocomplete="off">
+                    <div class="error-message" id="emailCodeError"></div>
+                    <div class="success-message" id="emailCodeSuccess"></div>
+                </div>
+
+                <button type="button" class="btn" onclick="nextStep(2)">下一步</button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(2)">上一步</button>
+            </div>
+
+            <!-- 第三步：密码设置 -->
+            <div class="step" id="step3">
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" placeholder="请设置密码" autocomplete="new-password">
+                    <div class="error-message" id="passwordError"></div>
+                    <div class="password-requirements">
+                        <ul>
+                            <li id="req-length">长度在8-16个字符之间</li>
+                            <li id="req-letter">包含至少一个字母</li>
+                            <li id="req-number">包含至少一个数字</li>
+                            <li id="req-special">包含至少一个特殊字符</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" autocomplete="new-password">
+                    <div class="error-message" id="confirmPasswordError"></div>
+                    <div class="success-message" id="confirmPasswordSuccess"></div>
+                </div>
+
+                <button type="button" class="btn" onclick="submitRegistration()">完成注册</button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(3)">上一步</button>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="../../login_main_page/identity_division.html">← 返回身份选择</a>
+        </div>
+    </div>
+</body>
+  <!-- External JavaScript -->
+  <script src="static/js/register_visitor.js"></script>
+</html>

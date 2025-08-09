@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码找回 - 人脸识别验证</title>
+    <link rel="stylesheet" href="static/css/face_recogniztion_style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 密码找回验证</h1>
+            <p>请通过人脸识别验证您的身份</p>
+        </div>
+
+        <div class="camera-container">
+            <video id="video" autoplay muted style="display: none;"></video>
+            <div id="cameraPlaceholder" class="camera-placeholder">
+                <div class="icon">📷</div>
+                <p>点击开始验证以启动摄像头</p>
+            </div>
+            <canvas id="overlay" class="overlay"></canvas>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">开始身份验证</button>
+            <button id="stopBtn" class="stop-btn" disabled>停止验证</button>
+        </div>
+
+        <div id="status" class="status waiting">
+            系统已准备就绪，请点击"开始身份验证"
+        </div>
+
+        <div id="countdown" class="countdown" style="display: none;"></div>
+
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span class="label">当前验证用户：</span>
+            <span id="currentUsername"></span>
+        </div>
+
+        <div class="instructions">
+            <h3>🔍 验证说明</h3>
+            <p>• 本系统采用人脸识别和活体检测双重验证</p>
+            <p>• 请确保光线充足，面部清晰可见</p>
+            <p>• 系统会验证您的身份是否与账号匹配</p>
+            <p>• 验证成功后将自动跳转到密码重置页面</p>
+        </div>
+
+        <div class="security-notice">
+            <span class="icon">🔒</span>
+            <strong>安全提醒：</strong>系统会检测活体，使用照片或视频无法通过验证
+        </div>
+    </div>
+
+    <script src="./static/js/face_recogniztion.js"></script>
+</body>
+</html>

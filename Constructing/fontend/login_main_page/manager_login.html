@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Login Page</title>
+    <link rel="stylesheet" href="static/css/common_login_style.css">
+</head>
+<body>
+
+    <!-- Return Button -->
+    <a href="identity_division.html" class="return-button">Return</a>
+
+    <!-- Login Form -->
+    <div class="container">
+        <h1>Login</h1>
+        <div class="greeting">
+            <p>Welcome Manager!</p>
+        </div>
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" class="login-input" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" class="login-input" required>
+            
+            <button type="submit">Login</button>
+
+            <!-- Forgot Password Link -->
+            <div class="forgot-password">
+                <a href="../forgot_password/verify_account/manager_account.html">Forgot Password?</a>
+            </div>
+
+            <!-- Signup Link -->
+            <div class="signup">
+                <a href="../signup/signup_main_page/register0.html">Sign up</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal for error message -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p>Password or ID is incorrect</p>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="static/js/manager_login.js"></script>
+
+    <!-- JavaScript for dynamic background and modal -->
+    <script>
+        // Modal close functionality
+        document.getElementById("closeModal").onclick = function() {
+            document.getElementById("errorModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("errorModal")) {
+                document.getElementById("errorModal").style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

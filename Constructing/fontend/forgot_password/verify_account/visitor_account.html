@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor ForgotPassword</title>
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Reset Password</h1>
+        <div class="reminding">
+            <p>Please enter your name！</p>
+        </div>
+        <form id="accountForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" class="login-input" required>
+
+            <button type="submit">Confirm</button>
+        </form>
+    </div>
+
+    <!-- Modal for error message -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p id="errorMessage">Username is incorrect</p>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="js/visitor_account.js"></script>
+</body>
+</html>
